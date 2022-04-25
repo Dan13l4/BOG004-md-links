@@ -1,11 +1,8 @@
-const utils = require("./src/links.js");
+//se importa la función md-links
+const mdLinks = require('./src/links.js')
+// node methods process
+const process = require('process');
+const arguments = process.argv;
 
-const mdLinks = (path, options) => {
-  return new Promise((resolve, reject) => {
-    let arrayLinks = [];
-
-    if (!utils.existRoute(path)) {
-      reject("Route not exist")
-    }
-  })
-};
+//Se invoca la función
+mdLinks(arguments);

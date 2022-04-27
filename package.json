@@ -46,6 +46,7 @@
     "stylelint-config-recommended": "^6.0.0"
   },
   "dependencies": {
+    "axios": "^0.27.1",
     "fetch": "^1.1.0",
     "markdown-it": "^12.3.2"
   }

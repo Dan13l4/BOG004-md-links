@@ -1,59 +1,54 @@
-const {
+// Importamos Módulos de node
+const{
     converterPath,
     validatePath,
-    isDir,
-    readDirFiles,
-    isFileMd,
-} = require("./node-methods.js");
+    fileSearch,
+    readFilesContent,
+} = require('./node-methods.js');
 
+//node methods filesystem - path
+const path = require("path");
+
+//Función mdLinks
 const mdLinks = (args) => new Promise((resolve, reject) => {
-    //node methods filesystem - path
-    const path = require("path");
 
-    // Captura la ruta apartir del array
-    const catchedPath = args[2];
+//captura de la ruta a partir del array de args
+    const terminalPathCacht = args[2];
+    console.log('Terminal cacht', terminalPathCacht);
 
-    // Confirma si la ruta es absoluta
-    console.log("Es una ruta absoluta?:", path.isAbsolute(catchedPath));
+//convertir ruta capturada en absoluta
+    const pathAbsolute = converterPath(terminalPathCacht);
+    console.log("path", pathAbsolute);
 
-    // invoca funcion converterPath
-    const absolutePath = converterPath(catchedPath)
-    console.log("Ruta ingresada:", absolutePath)
+// Guardo el rersultado e invoco la función pasando como argumento pathAbsolute
+    const resultValidatePath  = validatePath(pathAbsolute);
+    console.log('Ruta válida?', resultValidatePath);
 
+//Condicional que valida la ruta y la recursividad invocando la función fileSearch desde nodeMethods
+let arrayFilePathMd = [];
+if(resultValidatePath) {
+    const filesMdResp = fileSearch(arrayFilePathMd, pathAbsolute);// invocamos la función que nos da la recursividad
+    console.log('Hola desde md-links', filesMdResp);
+}else {
+    const invalidPath = 'La ruta ingresada no es válida'
+    console.log(invalidPath)
+}
 
-    // invoca funcion validatePath
-    const resultValidatePath = validatePath(absolutePath)
-    console.log("Es una ruta valida?:", resultValidatePath)
+// //sin Promesa:
+// const readFiles = readFilesContent(arrayFilePathMd);
+//     console.log('ReadFiles desde md-links', readFiles);
 
-    // se declara array de rutas
-     const pathArray = [];
+// Con promesa:
+const readFiles = readFilesContent(arrayFilePathMd)
+    .then((arrayFilePathMd)=>{
+        console.log('ReadFiles desde md-links',arrayFilePathMd);
+        resolve(readFiles);
+    })
+    .catch((error)=>{
+        const errorMessage = 'Error';
+        reject(error, errorMessage);
+    });
 
-    // condicional de programa si la ruta es valida
-    if(resultValidatePath){ // ingresa solo si la ruta es valida
-        isDir(absolutePath) // ingresa solo si es directorio
-        .then((isDirResult) => {
-            if(isDirResult){
-            console.log('Recursividad:');
-            const dirFiles = readDirFiles(absolutePath);
-            resolve(dirFiles);
-            // deberia retornar un array con una o mas rutas
-            }else{
-            console.log('GUARDA RUTA MD EN ARRAY');
-            const isFileMdResult =  isFileMd(absolutePath);
-            // console.log(isFileMdResult);
-            pathArray.push(isFileMdResult);
-            console.log(pathArray);
-            // resolve(isFileMdResult);
-            }
-        })
-        .catch((error) => {
-            console.log('soy error', error);
-        });
-    }else{
-        const invalidPath = 'Ruta no valida';
-        console.log(invalidPath);
-        return invalidPath;
-    }
-});
+})
 
 module.exports = mdLinks;

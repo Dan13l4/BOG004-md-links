@@ -1,66 +1,78 @@
-// node methods filesystem - path
-const fs = require('fs');
-const path = require("path");
+    //node methods filesystem - path
+    const fs = require('fs');
+    const path = require("path");
 
-// verifica si existe la ruta
+//Resuelve y normaliza la ruta dada
+const converterPath = (pathToConvert) => {
+    let converterPathResult;
+    const pathAbsolute = path.isAbsolute(pathToConvert) 
+    console.log('Soy una ruta absoluta?', pathAbsolute);
+    pathAbsolute
+        ? converterPathResult = pathToConvert 
+        : converterPathResult = path.resolve(pathToConvert).normalize();
+    return converterPathResult;
+}
+
+// Función para verifica si existe la ruta
 const validatePath = (path) => fs.existsSync(path);
 
 
-// funcion para convertir ruta capturada a una ruta absoluta
-const converterPath = (pathToConvert) => {
-    let pathToConvertResult;
-    path.isAbsolute(pathToConvert) ? pathToConvertResult = pathToConvert : pathToConvertResult = path.resolve(pathToConvert).normalize();
-    return pathToConvertResult;
-};
+//Función recursiva para leer el contedido de un directorio
+const fileSearch = (arrayPaths, fileAbsolutePath) =>{
+    const isDirResult = fs.statSync(fileAbsolutePath).isDirectory();
+    if(isDirResult){
+        const dirFileRes = fs.readdirSync(fileAbsolutePath); //recorrer el contenido de un directorio
+        dirFileRes.forEach((file) => {
+            const dirAbsolutepath = path.join(fileAbsolutePath, file);
+            fileSearch(arrayPaths, dirAbsolutepath);
+        });
+    }else{
+        const fileExtensionRes = path.extname(fileAbsolutePath);//obtine .md
+        if(fileExtensionRes === '.md'){
+            arrayPaths.push(fileAbsolutePath);
+        }
+    }
+    return arrayPaths;
+}
 
-// funcion para verificar si es un directorio
-const isDir = (pathToCheck) => new Promise((resolve) => {
-    fs.stat(pathToCheck, (err, stat) =>{
-        if (err) throw err;
-        const isDirResult = stat.isDirectory();
-        console.log("Soy un directorio?:", isDirResult);
-        resolve(isDirResult);
-    });
+// Sin Promesa:
+
+// const readFilesContent = (pathToRead) => {
+//     pathToRead.forEach((element) => {
+//         fs.readFile(element, 'utf8', function(err, data) {
+//         if (err){
+//             const errorMessage = ' No se puede leer el conbtenido del archivo';
+//             console.log(errorMessage);
+//         }else{
+//             console.log(data);
+//             // resolve (data);
+//         }
+//         });
+//     })
+// };
+
+// Con Promesa:
+
+const readFilesContent = (pathToRead) => new Promise ((resolve) => {
+    pathToRead.forEach((element) => {
+        fs.readFile(element, 'utf8', function(err, data) {
+        if (err){
+            const errorMessage = ' No se puede leer el conbtenido del archivo';
+            console.log(errorMessage);
+        }else{
+            // console.log(data);
+            resolve(data);
+        }
+        });
+    })
 });
 
-// funcion para revisar si es archivo md y leer su contenido
-const isFileMd = (filePath) => {
-    const fileExtensionResult = fileExtension(filePath);
-    if(fileExtensionResult === '.md'){
-        return filePath;
-    }else{
-        const isFileMdError = 'Archivo no tiene extención .md';
-        return isFileMdError;
-    }
-};
 
-// funcion para revisar extencion de archivo
-const fileExtension = (filePath) => {
-    const extension = path.extname(filePath);
-    return extension;
-}
-
-// funcion para revisar documentos del directorio
-const readDirFiles = (pathToCheckContent) =>{
-    const dirFiles = fs.readdirSync(pathToCheckContent);
-    console.log("Contenido del directorio:", dirFiles);
-    return dirFiles;
-};
-
-// funcion para leer contenido de un archivo
-const readFileContent = (pathToRead) => {
-    fs.readFile(pathToRead, 'utf8', function(err, data) {
-        if (err) throw err;
-        console.log(data);
-        return data; 
-    });
-}
 
 
 module.exports = {
     converterPath,
     validatePath,
-    isDir,
-    readDirFiles,
-    isFileMd,
-};
+    fileSearch,
+    readFilesContent,
+}

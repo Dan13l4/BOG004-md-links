@@ -3,7 +3,8 @@ const{
     converterPath,
     validatePath,
     fileSearch,
-    readFilesContent,
+    readFileContent,
+    getLinks
 } = require('./node-methods.js');
 
 //node methods filesystem - path
@@ -25,30 +26,29 @@ const mdLinks = (args) => new Promise((resolve, reject) => {
     console.log('Ruta válida?', resultValidatePath);
 
 //Condicional que valida la ruta y la recursividad invocando la función fileSearch desde nodeMethods
-let arrayFilePathMd = [];
+const arrayFilePathMd = [];
 if(resultValidatePath) {
     const filesMdResp = fileSearch(arrayFilePathMd, pathAbsolute);// invocamos la función que nos da la recursividad
-    console.log('Hola desde md-links', filesMdResp);
+    console.log('Direcciones encontradas:', filesMdResp);
 }else {
     const invalidPath = 'La ruta ingresada no es válida'
     console.log(invalidPath)
 }
 
-// //sin Promesa:
-// const readFiles = readFilesContent(arrayFilePathMd);
-//     console.log('ReadFiles desde md-links', readFiles);
+//sin Promesa:👇
+console.log('-----Lectura de los archivos:-----');
+readFileContent(arrayFilePathMd);
 
 // Con promesa:
-const readFiles = readFilesContent(arrayFilePathMd)
-    .then((arrayFilePathMd)=>{
-        console.log('ReadFiles desde md-links',arrayFilePathMd);
-        resolve(readFiles);
-    })
-    .catch((error)=>{
-        const errorMessage = 'Error';
-        reject(error, errorMessage);
-    });
+// const readFiles = readFileContent(arrayFilePathMd)
+//     .then((arrayFilePathMd) => {
+//         console.log('ReadFiles desde md-links:', arrayFilePathMd);
+//         resolve(readFiles);
+//     })
+//     .catch((error) => {
+//         const errorMessage = 'Error';
+//         reject(error, errorMessage);
+//     });
 
 })
-
 module.exports = mdLinks;

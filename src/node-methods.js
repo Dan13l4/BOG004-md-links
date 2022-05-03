@@ -7,7 +7,6 @@ const chalk = require('chalk');
 const converterPath = (pathToConvert) => {
   let converterPathResult;
   const pathAbsolute = path.isAbsolute(pathToConvert);
-  console.log(chalk.cyan.bold("| | ✧ ✿ ...Es una ruta absoluta?:... ✿ ✧ | |"), pathAbsolute);
   pathAbsolute
     ? (converterPathResult = pathToConvert)
     : (converterPathResult = path.resolve(pathToConvert).normalize());
@@ -41,18 +40,18 @@ const regxText = new RegExp (/\[[\w\s\d.()]+\]/);
 const regxUrl = new RegExp (/\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/mg);
 
 
-const getLinks = (fileContent) => {
+const getLinks = (fileContent, arrayMds) => {
     const content = fileContent;
     const contentLinks = content.match(regxLink);
     let turnedLinksArray;
      if (contentLinks) {
-      turnedLinksArray = contentLinks.map((myLinks, arrayPaths) => {
+      turnedLinksArray = contentLinks.map((myLinks) => {
       const myhref = myLinks.match(regxUrl).join().slice(1, -1); // URL encontradas
       const mytext = myLinks.match(regxText).join().slice(1, -1); // texto que hace ref a URL
       return {
         href: myhref,
         text: mytext,
-        fileName: arrayPaths, // ruta donde se encuentra URL
+        FileLocation: arrayMds, // ruta donde se encuentra URL
       };
     });
   }else if (contentLinks === null) {
@@ -71,7 +70,7 @@ const readFilesContent = (arrayMds) => new Promise ((resolve) => {
                 const errorMessage = chalk.red.bold('| | ✧ ✿ ...No se puede leer el contenido del archivo... ✿ ✧ | |');
                 console.log(errorMessage);
             }else{
-                arraysMds.push(getLinks(data));
+                arraysMds.push(getLinks(data, element));
                 if (arrayMds.length === arraysMds.length) {
                   resolve(arraysMds.flat());                  
                 }

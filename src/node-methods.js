@@ -51,7 +51,7 @@ const getLinks = (fileContent, arrayMds) => {
       const mytext = myLinks.match(regxText).join().slice(1, -1); // texto que hace ref a URL
       return {
         href: myhref,
-        text: mytext,
+        text: mytext.substring(0,50),
         FileLocation: arrayMds, // ruta donde se encuentra URL
       };
     });

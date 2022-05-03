@@ -24,12 +24,10 @@ const mdLinks = (args) => new Promise((resolve, reject) => {
 
 //Condicional que valida la ruta y la recursividad invocando la función fileSearch desde nodeMethods
     let arrayFilePathMd = [];
-    if(resultValidatePath === false) {
-        console.log(chalk.red.bold('| | ✧ ✿ ...No hay archivos encontrados... ✿ ✧ | |'));
-    }else if(resultValidatePath) {
+    if(resultValidatePath) {
         const filesMdResp = fileSearch(arrayFilePathMd, pathAbsolute);// invocamos la función que nos da la recursividad
         if(filesMdResp.length === 0) {
-            console.log(chalk.red.bold('| | ✧ ✿ ...No hay archivos encontrados... ✿ ✧ | |'));
+            console.log(chalk.red.bold('| | ✧ ✿ ...No hay archivos md encontrados... ✿ ✧ | |'));
         }else{
             console.log(chalk.cyan.bold('| | ✧ ✿ ...Archivos encontrados:... ✿ ✧ | |'), filesMdResp);
         }
@@ -41,12 +39,16 @@ const mdLinks = (args) => new Promise((resolve, reject) => {
 // Lecutra de los archivos:
     readFilesContent(arrayFilePathMd)
     .then((objectLinks)=>{
-        console.log(chalk.cyan.bold('| | ✧ ✿ ...Lectura de los archivos:... ✿ ✧ | |'));
-        console.group(chalk.blueBright.bold('| | ✧ ✿ ...Links obtenidos:... ✿ ✧ | |'));
-        resolve(objectLinks);
+        if(objectLinks.length === 0){
+            console.log(chalk.red.bold('| | ✧ ✿ ...No se han encontrado links dentro del archivo md... ✿ ✧ | |'));
+        }else{
+            console.log(chalk.cyan.bold('| | ✧ ✿ ...Lectura de los archivos:... ✿ ✧ | |'));
+            console.log(chalk.blueBright.bold('| | ✧ ✿ ...Links obtenidos:... ✿ ✧ | |'));
+            resolve(objectLinks);
+        }
     })
     .catch((error)=>{
-        const errorMessage = 'Error no se encuentra ningun link'
+        const errorMessage = 'Error'
         reject(error, errorMessage)
     });
 

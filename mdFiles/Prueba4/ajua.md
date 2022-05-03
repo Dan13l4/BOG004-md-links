@@ -1,2 +1,2 @@
 Link de editor de mds
-[MDEditor](https://www.npmjs.com/package/chalk)
+[MDEditor](https://pandao.github.io/editor.md/en.html)

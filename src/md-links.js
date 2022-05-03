@@ -16,7 +16,7 @@ const mdLinks = (args) => new Promise((resolve, reject) => {
 
 //convertir ruta capturada en absoluta
     const pathAbsolute = converterPath(terminalPathCacht);
-    console.log(chalk.cyan.bold("| | ✧ ✿ ...Ruta ingresada:... ✿ ✧ | |"), pathAbsolute);
+    console.log(chalk.cyan.bold('| | ✧ ✿ ...Ruta ingresada:... ✿ ✧ | |'), pathAbsolute);
 
 // Guardo el rersultado e invoco la función pasando como argumento pathAbsolute
     const resultValidatePath  = validatePath(pathAbsolute);
@@ -24,22 +24,29 @@ const mdLinks = (args) => new Promise((resolve, reject) => {
 
 //Condicional que valida la ruta y la recursividad invocando la función fileSearch desde nodeMethods
     let arrayFilePathMd = [];
-    if(resultValidatePath) {
+    if(resultValidatePath === false) {
+        console.log(chalk.red.bold('| | ✧ ✿ ...No hay archivos encontrados... ✿ ✧ | |'));
+    }else if(resultValidatePath) {
         const filesMdResp = fileSearch(arrayFilePathMd, pathAbsolute);// invocamos la función que nos da la recursividad
-        console.log(chalk.cyan.bold('| | ✧ ✿ ...Archivos encontrados:... ✿ ✧ | |'), filesMdResp);
-    }else {
-        const invalidPath = chalk.red.bold('| | ✧ ✿ ...La ruta ingresada no es válida... ✿ ✧ | |')
-        console.log(invalidPath)
+        if(filesMdResp.length === 0) {
+            console.log(chalk.red.bold('| | ✧ ✿ ...No hay archivos encontrados... ✿ ✧ | |'));
+        }else{
+            console.log(chalk.cyan.bold('| | ✧ ✿ ...Archivos encontrados:... ✿ ✧ | |'), filesMdResp);
+        }
+    }else{
+        const invalidPath = chalk.red.bold('| | ✧ ✿ ...La ruta ingresada no es válida... ✿ ✧ | |');
+        console.log(invalidPath);
     }
 
 // Lecutra de los archivos:
     readFilesContent(arrayFilePathMd)
     .then((objectLinks)=>{
         console.log(chalk.cyan.bold('| | ✧ ✿ ...Lectura de los archivos:... ✿ ✧ | |'));
-        console.group(chalk.blueBright.bold("| | ✧ ✿ ...Links obtenidos:... ✿ ✧ | |") , objectLinks);
+        console.group(chalk.blueBright.bold('| | ✧ ✿ ...Links obtenidos:... ✿ ✧ | |'));
+        resolve(objectLinks);
     })
     .catch((error)=>{
-        const errorMessage = 'Error'
+        const errorMessage = 'Error no se encuentra ningun link'
         reject(error, errorMessage)
     });
 

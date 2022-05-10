@@ -1,16 +1,43 @@
 #!/usr/bin/env node
-const process = require("process");
-const mdLinks = require("./md-links.js");
-const terminalArg = process.argv;
+//se importa la función md-links
+const mdLinks = require('./index.js');
+const finalOutput = require("./utils.js")
+const process = require('process');
+const chalk = require('chalk');
+const { resolve } = require('path');
 
-const cliEnojado = () => {
-    mdLinks(terminalArg)
-    .then((result) => {
-        console.log(result);
-    })
-    .catch((error) => {
-        console.log(error);
-    })
+
+//Captura argumentos desde la Terminal
+const pathArg = process.argv[2];
+const optionsArg = {};
+
+if(process.argv.includes('--validate')){
+  optionsArg.validate = true;
 }
 
-cliEnojado();
+if (process.argv.includes('--stats')) {
+  optionsArg.stats = true;
+}
+
+// array de argumentos para evaluacion de options
+const terminalArg = [pathArg];
+
+if (optionsArg.validate === true) {
+  terminalArg.push('--validate');
+}
+  
+if (optionsArg.stats === true) {
+  terminalArg.push('--stats');
+}
+
+// se invoca función cliFuntion
+const cliFuntion = () => {
+  mdLinks(pathArg, optionsArg)
+  .then((result) => {
+    console.log(result)
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+ }
+cliFuntion();

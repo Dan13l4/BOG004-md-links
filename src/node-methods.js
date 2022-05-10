@@ -1,6 +1,6 @@
 //node methods filesystem - path
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 
 //Se importa Fetch para realizar la petición HTTP
@@ -12,9 +12,8 @@ const chalk = require('chalk');
  * @param {*} pathToConvert 
  * @returns 
  */
- const { default: fetch } = require("node-fetch");
- const { runInContext } = require("vm");
-
+ const { default: fetch } = require('node-fetch');
+const { rejects } = require('assert');
 
 //Resuelve y normaliza la ruta dada
 const converterPath = (pathToConvert) => {
@@ -40,7 +39,7 @@ const fileSearch = (arrayPaths, fileAbsolutePath) => {
     });
   } else {
     const fileExtensionRes = path.extname(fileAbsolutePath); //obtine .md
-    if (fileExtensionRes === ".md") {
+    if (fileExtensionRes === '.md') {
       arrayPaths.push(fileAbsolutePath);
     }
   }
@@ -48,7 +47,7 @@ const fileSearch = (arrayPaths, fileAbsolutePath) => {
 };
 
 //Función para Extraer Links de archivos .md
-const getLinks = (fileContent, pathMdList) => new Promise((resolve)=>{
+const getLinks = (fileContent, pathMdList) => new Promise((resolve)=>{//convertirlo en promesa
   const regxLink = new RegExp(/\[([\w\s\d.()]+)\]\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/gm);
   const regxUrl = /\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/gm;
   const regxText = /\[[\w\s\d.()]+\]/;
@@ -70,13 +69,11 @@ const getLinks = (fileContent, pathMdList) => new Promise((resolve)=>{
   }
 });
 
-
-
 // Función para leer los archivos:
 const readFilesContent = (pathMdList) => new Promise((resolve) => {
   const arrMds = [];
     pathMdList.map((element) => {
-      fs.readFile(element, "utf8", function (err, data) {
+      fs.readFile(element, 'utf8', function (err, data) {
       if (err) {
         const errorMessage = '| | ✧ ✿ ...No se puede leer el contenido del archivo... ✿ ✧ | |';
         console.log(chalk.red.bold(errorMessage));
@@ -88,6 +85,9 @@ const readFilesContent = (pathMdList) => new Promise((resolve) => {
             resolve(arrMds.flat());
           }
         })
+      .catch((error)=>{
+        reject(error)
+      })
       }
     });
   });
@@ -99,47 +99,23 @@ const readFilesContent = (pathMdList) => new Promise((resolve) => {
 
 // Función para hacer la petición HTTP:
 const httpPetitionStatus = (arrObjLinks) => {
-  const arrPromise = arrObjLinks.map((obj) => fetch(obj)
-      .then(() => ({
-        href: obj.href,
-        text: obj.text,
-        file: obj.file,
-        status: 200,
-        statusText: 'OK'
+  const arrPromise = arrObjLinks.map((obj) => fetch(obj.href)
+      .then((res) => ({
+      href: obj.href,
+      text: obj.text,
+      file: obj.file,
+      status: res.status,
+      ok: res.ok ? 'OK' : 'fail'
       }))
       .catch(() => ({
-        href: obj.href,
-        text: obj.text,
-        file: obj.file,
-        status: 404,
-        statusText: 'FAIL'
+      href: obj.href,
+      text: obj.text,
+      file: obj.file,
+      status: 404,
+      ok: 'fail'
       })));
   return Promise.all(arrPromise);
 };
-
-// funcion output con --stats
-const outputWithS = (arrObjLinks) => {
-  const totalLinks = arrObjLinks.length;
-  const unique = [...new Set(arrObjLinks.map((obj) => obj.href))];
-  const uniqueLinks = unique.length;
-  console.log(chalk.cyan.bold("| | ✧ ✿ ...Stats:... ✿ ✧ | |"))
-  console.table({ TOTAL: totalLinks, UNIQUE: uniqueLinks });
-};
-
-// funcion output con --stats y con --validate
-const outputWithVS = (arrObjLinks) => {
-  const totalLinks = arrObjLinks.length;
-  const unique = [...new Set(arrObjLinks.map((obj) => obj.href))];
-  const uniqueLinks = unique.length;
-  const broken = arrObjLinks.filter((obj) => {
-    console.log(obj)
-    return obj.status !== '200'
-  });
-  const brokenLinks = broken.length;
-  console.log(chalk.cyan.bold("| | ✧ ✿ ...Stats con Validate:... ✿ ✧ | |"))
-  console.table({ TOTAL: totalLinks, UNIQUE: uniqueLinks, BROKEN: brokenLinks });
-};
-
 
 module.exports = {
   converterPath,
@@ -148,6 +124,4 @@ module.exports = {
   readFilesContent,
   getLinks,
   httpPetitionStatus,
-  outputWithS,
-  outputWithVS,
 };

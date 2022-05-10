@@ -1,43 +1,51 @@
 #!/usr/bin/env node
-//se importa la función md-links
 const mdLinks = require('./index.js');
-const finalOutput = require("./utils.js")
 const process = require('process');
 const chalk = require('chalk');
-const { resolve } = require('path');
+const { arrayTemplate, statusTemplate, totalLinks } = require('./stats.js');
 
+const arguments = process.argv.slice(2);
 
-//Captura argumentos desde la Terminal
-const pathArg = process.argv[2];
-const optionsArg = {};
-
-if(process.argv.includes('--validate')){
-  optionsArg.validate = true;
+switch (arguments.length) {
+  case 0:
+    console.log(chalk.cyanBright.bold('| | ✧ ✿ • Por favor Ingresa una Ruta • ✿ ✧ | |'));
+    break;
+  case 1:
+    mdLinks(arguments[0], { validate: false })
+      .then((response) => {
+        console.log(`${arrayTemplate(response)}`);
+      })
+      .catch((err) => console.log(chalk.redBright.bold(err)));
+    break;
+  case 2:
+    if (arguments[1] === '--validate') {
+      mdLinks(arguments[0], { validate: true })
+        .then((response) => {
+          console.log(`${statusTemplate(response)}`);
+        })
+        .catch((err) => console.log(chalk.redBright.bold(err)));
+    } else if (arguments[1] === '--stats') {
+      mdLinks(arguments[0], { validate: true })
+        .then((response) => {
+          console.log(`${totalLinks(response)}`);
+        })
+        .catch((err) => console.log(chalk.redBright.bold(err)));
+    }
+    else console.log(chalk.redBright.bold('| | ✧ ✿ • Opción Inválida • ✿ ✧ | |'));
+    break;
+  case 3:
+    if (
+      (arguments[1] === '--validate' && arguments[2] === '--stats') ||
+      (arguments[1] === '--stats' && arguments[2] === '--validate')
+    ) {
+      mdLinks(arguments[0], { validate: true })
+        .then((response) => {
+          console.log(`${totalLinks(response)}`);
+          console.log(`${statusTemplate(response)}`);
+        })
+        .catch((err) => console.log(chalk.redBright.bold(err)));
+    } else console.log(chalk.redBright.bold('| | ✧ ✿ • Opción Inválida • ✿ ✧ | |'));
+    break;
+  default:
+    console.log(chalk.redBright.bold('| | ✧ ✿ • Entrada de Datos Incorrectos• ✿ ✧ | |'));
 }
-
-if (process.argv.includes('--stats')) {
-  optionsArg.stats = true;
-}
-
-// array de argumentos para evaluacion de options
-const terminalArg = [pathArg];
-
-if (optionsArg.validate === true) {
-  terminalArg.push('--validate');
-}
-  
-if (optionsArg.stats === true) {
-  terminalArg.push('--stats');
-}
-
-// se invoca función cliFuntion
-const cliFuntion = () => {
-  mdLinks(pathArg, optionsArg)
-  .then((result) => {
-    console.log(result)
-  })
-  .catch((error) => {
-    console.log(error);
-  });
- }
-cliFuntion();

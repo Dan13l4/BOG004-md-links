@@ -2,10 +2,10 @@ const mdLinks = require('../src/index.js');
 
 const path = 'test/doc-test';
 
-const rutaArchivoMd = 'test/doc-test/prueba.md';
-const rutaInvalida = 'test/doc-test/prueba7.md';
-const rutaSinLinks = 'test/doc-test/prueba4.md';
-const rutaSinArchivo = 'test/doc-test/doc3-test';
+const mdFilePath = 'test/doc-test/prueba.md';
+const invalidpath = 'test/doc-test/prueba7.md';
+const routeWithoutLinks = 'test/doc-test/prueba4.md';
+const pathNoFile = 'test/doc-test/doc3-test';
 
 const arrObjLinks = [
   {
@@ -19,7 +19,7 @@ const arrObjLinks = [
     file: 'C:\\Users\\57322\\Documents\\GitHub\\Proyectos Laboratoria\\BOG004-md-links\\test\\doc-test\\prueba.md'
 }];
 
-const arrObjLinksValidados = [
+const arrObjLinksValidated = [
   {
     href: 'https://github.com/Laboratoria/BOG004-md-links',
     text: 'Link readme laboratoria',
@@ -45,22 +45,22 @@ describe('mdLinks', () => {
   });
 
   it('Should return an array of validated links objects', () => {
-     return mdLinks(rutaArchivoMd, {validate:true}).then(e => expect(e).toEqual(arrObjLinksValidados))
+     return mdLinks(mdFilePath, {validate:true}).then(e => expect(e).toEqual(arrObjLinksValidated))
   });
 
   it('Should return an array of unvalidated link objects', () => {
-    return mdLinks(rutaArchivoMd, {validate:false}).then(e => expect(e).toEqual(arrObjLinks))
+    return mdLinks(mdFilePath, {validate:false}).then(e => expect(e).toEqual(arrObjLinks))
   })
 
   it('Should return an error because the path is invalid', () => {
-    return mdLinks(rutaInvalida, {validate:true}).catch(e => expect(e).toMatch("| | ✧ ✿ ...La ruta ingresada no es válida... ✿ ✧ | |"))
+    return mdLinks(invalidpath, {validate:true}).catch(e => expect(e).toMatch("| | ✧ ✿ ...The path entered is not valid... ✿ ✧ | |"))
   })
 
   it('Should return an error because there are no links inside the md file', () => {
-    return mdLinks(rutaSinLinks, {validate:true}).catch(e => expect(e).toMatch("| | ✧ ✿ ...No se han encontrado links dentro del archivo md... ✿ ✧ | |"))
+    return mdLinks(routeWithoutLinks, {validate:true}).catch(e => expect(e).toMatch("| | ✧ ✿ ...No links found inside md file... ✿ ✧ | |"))
   })
 
   it('Should return an error because there are no md files inside the folder', () => {
-    return mdLinks(rutaSinArchivo, {validate:true}).catch(e => expect(e).toMatch("| | ✧ ✿ ...No hay archivos md encontrados o el archivo no es md... ✿ ✧ | |"))
+    return mdLinks(pathNoFile, {validate:true}).catch(e => expect(e).toMatch("| | ✧ ✿ ...No md files found or file is not md... ✿ ✧ | |"))
   })
 });

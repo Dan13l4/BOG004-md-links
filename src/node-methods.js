@@ -5,7 +5,6 @@ const chalk = require('chalk');
 
 //Se importa Fetch para realizar la petición HTTP
 // import fetch from 'node-fetch';
-// const fetch = require('node-fetch')
 
 /**
  * @param {*} arrObjLinks
@@ -47,7 +46,7 @@ const fileSearch = (arrayPaths, fileAbsolutePath) => {
 };
 
 //Función para Extraer Links de archivos .md
-const getLinks = (fileContent, pathMdList) => new Promise((resolve)=>{//convertirlo en promesa
+const getLinks = (fileContent, pathMdList) => new Promise((resolve)=>{
   const regxLink = new RegExp(/\[([\w\s\d.()]+)\]\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/gm);
   const regxUrl = /\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/gm;
   const regxText = /\[[\w\s\d.()]+\]/;
@@ -75,7 +74,7 @@ const readFilesContent = (pathMdList) => new Promise((resolve) => {
     pathMdList.map((element) => {
       fs.readFile(element, 'utf8', function (err, data) {
       if (err) {
-        const errorMessage = '| | ✧ ✿ ...No se puede leer el contenido del archivo... ✿ ✧ | |';
+        const errorMessage = '| | ✧ ✿ ...Cannot read file content... ✿ ✧ | |';
         console.log(chalk.red.bold(errorMessage));
       } else {
       getLinks(data, element)

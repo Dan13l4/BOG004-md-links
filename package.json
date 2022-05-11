@@ -1,7 +1,55 @@
 {
-  "name": "md-links",
+  "name": "md-links-kdbaron",
   "version": "0.1.0",
   "engines": {
     "node": ">=14.x"
+  },
+  "description": "Project dedicated to using node to extract links from markdown files.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "htmlhint": "htmlhint dist/*.html ",
+    "eslint": "eslint --ext .js src/ test/",
+    "stylelint": "stylelint --aei src/**/*.css",
+    "pretest.out": "npm run htmlhint && npm run eslint && npm run stylelint",
+    "test": "jest --coverage --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dan13l4/BOG004-md-links.git"
+  },
+  "keywords": [
+    "npm",
+    "javascript",
+    "link",
+    "jest"
+  ],
+  "author": "Karen Baron",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dan13l4/BOG004-md-links/issues"
+  },
+  "homepage": "https://github.com/Dan13l4/BOG004-md-links#readme",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^25.3.0",
+    "htmlhint": "^1.1.2",
+    "jest": "^27.5.1",
+    "stylelint": "^14.1.0",
+    "stylelint-config-recommended": "^6.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "node-fetch": "^2.6.7"
+  },
+  "bin": {
+    "md-links": "./src/CLI.js"
   }
 }

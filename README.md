@@ -57,71 +57,71 @@ Reflect and then mark the objectives that you have come to understand and apply 
 
 ### JavaScript
 
-- [x] **Diferenciar entre tipos de datos primitivos y no primitivos**
+- [x] **Differentiate between primitive and non-primitive data types**
 
 - [x] **Arrays (arreglos)**
 
-- [x] **Objetos (key, value)**
+- [x] **Objets (key, value)**
 
-- [x] **Uso de condicionales (if-else, switch, operador ternario, lógica booleana)**
+- [x] **Use of conditionals (if-else, switch, ternary operator, boolean logic)**
 
-- [x] **Funciones (params, args, return)**
+- [x] **Functions (params, args, return)**
 
-- [x] **Recursión o recursividad**
+- [x] **Recursion or recursion**
 
-- [x] **Módulos de CommonJS**
+- [x] **CommonJS modules**
 
-- [x] **Diferenciar entre expresiones (expressions) y sentencias (statements)**
+- [x] **Differentiate between expressions and statements**
 
 - [x] **Callbacks**
 
-- [x] **Promesas**
+- [x] **Promises**
 
-- [x] **Pruebas unitarias (unit tests)**
+- [x] **Unit tests**
 
-- [] **Pruebas asíncronas**
+- [] **Asynchronous tests**
 
-- [x] **Uso de mocks y espías**
+- [x] **Use of mocks and spies**
 
-- [x] **Pruebas de compatibilidad en múltiples entornos de ejecución**
+- [x] **Compatibility tests in multiple execution environments**
 
-- [x] **Uso de linter (ESLINT)**
+- [x] **Use of linter (ESLINT)**
 
-- [x] **Uso de identificadores descriptivos (Nomenclatura y Semántica)**
+- [x] **Use of descriptive identifiers (Nomenclature and Semantics)**
 
 ### Node.js
 
-- [x] **Instalar y usar módulos con npm**
+- [x] **Install and use modules with npm**
 
-- [x] **Configuración de package.json**
+- [x] **Package.json settings**
 
-- [x] **Configuración de npm-scripts**
+- [x] **Configuration of npm-scripts**
 
 - [x] **process (env, argv, stdin-stdout-stderr, exit-code)**
 
 - [x] **File system (fs, path)**
 
-### Control de Versiones (Git y GitHub)
+### Version Control (Git and GitHub)
 
-- [x] **Git: Instalación y configuración**
+- [x] **Git: Installation and configuration**
 
-- [x] **Git: Control de versiones con git (init, clone, add, commit, status, push, pull, remote)**
+- [x] **Git: Version control with git (init, clone, add, commit, status, push, pull, remote)**
 
-- [x] **Git: Integración de cambios entre ramas (branch, checkout, fetch, merge, reset, rebase, tag)**
+- [x] **Git: Integration of changes between branches (branch, checkout, fetch, merge, reset, rebase, tag)**
 
-- [x] **GitHub: Creación de cuenta y repos, configuración de llaves SSH**
+- [x] **GitHub: Account creation and repos, configuration of SSH keys**
 
-- [x] **GitHub: Despliegue con GitHub Pages**
+- [x] **GitHub: Deploy with GitHub Pages**
 
-- [x] **GitHub: Colaboración en Github (branches | forks | pull requests | code review | tags)**
+- [x] **GitHub: Collaboration on Github (branches | forks | pull requests | code review | tags)**
 
-- [x] **GitHub: Organización en Github (projects | issues | labels | milestones | releases)**
+- [x] **GitHub: Organization on Github (projects | issues | labels | milestones | releases)**
 
 ### HTTP
 
-- [x] **Consulta o petición (request) y respuesta (response).**
+- [x] **Query or request (request) and response (response).**
 
-- [x] **Codigos de status de HTTP**
+- [x] **HTTP status codes**
 
 ***
 
